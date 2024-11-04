@@ -1,0 +1,76 @@
+/*
+
+Name : Isaac
+Class : DIT/1B/09
+Admin No. : p2317665
+
+*/ 
+/* Define custom colors using CSS variables */
+:root {
+    --custom-color: #FFCA45; /* Primary custom color */
+    --custom-color-darker: hsl(0.74, 100%, 89%); /* Darker shade of custom color */
+    --custom-color-light: #14213D; /* Lighter shade of custom color */
+    --custom-color-rgb: 20, 33, 61; /* RGB values of custom color */
+    --custom-color-light-rgb: 146, 247, 178; /* RGB values of lighter shade of custom color */
+    --custom-text-color: #ffffff; /* Custom text color */
+    --text-area: #424242; /* Background color for text areas */
+}
+
+/* Styling for active navigation links */
+.navbar-nav .nav-link.active {
+    position: relative;
+    color: #FFCA45; /* Custom color for active link text */
+}
+
+.navbar-nav .nav-link.active::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px; /* Adjust the height as needed */
+    background-color: #FFCA45; /* Yellow color */
+    border-radius: 5px; /* Adjust the border-radius for rounded corners */
+}
+
+/* Custom styling for primary buttons */
+.btn-primary {
+    --bs-btn-bg: var(--custom-color);
+    --bs-btn-border-color: var(--custom-color);
+    --bs-btn-hover-bg: var(--custom-color-darker);
+    --bs-btn-hover-border-color: var(--custom-color-darker);
+    --bs-btn-active-bg: var(--custom-color-light);
+    --bs-btn-active-border-color: var(--custom-color-light);
+    --bs-btn-disabled-bg: var(--bs-success-rgb);
+    --bs-btn-disabled-border-color: var(--bs-success-rgb);
+}
+
+/* Background color for primary elements */
+.bg-primary {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--custom-color-rgb),var(--bs-bg-opacity))!important;
+}
+
+/* Styling for checked form inputs */
+.form-check-input:checked {
+    background-color: var(--custom-color);
+    border-color: var(--custom-color);
+}
+
+/* Styling for focused form controls */
+.form-control:focus, 
+.form-check-input:focus {
+    border-color: rgba(var(--custom-color-light-rgb), 0.8);
+    box-shadow: 0 0 0 4px rgba(var(--custom-color-light-rgb), 0.6);
+}
+
+/* Custom styling for cards */
+.card, .card-label, .card-task {
+    background-color: var(--text-area); /* Background color for cards */
+    color: var(--custom-text-color); /* Text color for cards */
+}
+
+/* Styling for footer */
+footer {
+    color: var(--custom-text-color); /* Text color for footer */
+}
