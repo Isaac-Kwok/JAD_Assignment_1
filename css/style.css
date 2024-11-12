@@ -107,32 +107,23 @@
     height: auto; /* Maintain aspect ratio */
   }
   
-  /* Styles for ripple effect */
-  .ripple {
-    position: relative; /* Relative positioning for ripple effect */
-    overflow: hidden; /* Hide overflow content */
-    color: #121212; /* Ripple color */
-  }
-  
-  /* Styles for ripple effect before */
-  .ripple:before {
-    content: ""; /* Empty content */
-    position: absolute; /* Absolute positioning */
-    border-radius: 50%; /* Circle border radius */
-    background: hsl(0.74, 100%, 89%); /* Ripple background color */
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    transform: scale(0); /* Initial scale to 0 */
-    transform-origin: center center; /* Center the transformation origin */
-    opacity: 0.6; /* Initial opacity */
-    pointer-events: none; /* Exclude from pointer events */
-    transition: transform 0.6s, opacity 0.6s, background 0.3s; /* Transition effect */
-  }
-  
-  /* Styles for ripple effect on hover */
-  .ripple:hover:before {
-    transform: scale(4); /* Scale effect on hover */
-    opacity: 0; /* Disappear on hover */
-    background: hsl(0.74, 100%, 89%); /* Ripple background color */
-  } 
-  
+ .bg-top-footer {
+ background-color: #14213d
+ }
+ 
+ .bg-bottom-footer{
+ background-color: #141414
+ }
+ 
+
+/* Style for footer links */
+footer .list-unstyled li a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer .list-unstyled li a:hover {
+    color: #ddd; /* Slightly lighter color on hover */
+}
+

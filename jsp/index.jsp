@@ -13,6 +13,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Home - Cleaning Service</title>
+      <!-- Custom CSS -->
+  <link href="../css/style.css" rel="stylesheet">
+  <link href="../css/colour.css" rel="stylesheet">
 </head>
 <body>
     <main>
@@ -33,6 +36,8 @@
     </main>
 
     <br>
-    <%@ include file="../includes/footer.html" %> <!-- Include Footer -->
+
+<%@ include file="../includes/footer.html"%>
+<!-- Include Footer -->
 </body>
 </html>
