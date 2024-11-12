@@ -6,124 +6,135 @@
 
 /* Styles for cards */
 .card {
-    margin-bottom: 20px; /* Margin bottom for spacing between cards */
-    padding: 20px; /* Padding inside the card */
-    border-radius: 10px; /* Rounded corners for the card */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Box shadow for a subtle effect */
-    display: flex; /* Flex container */
-    flex-direction: column; /* Arrange items vertically */
-  }
-  
-  /* Styles for card body */
-  .card-body {
-    flex: 1; /* Take up remaining space */
-    display: flex; /* Flex container */
-    flex-direction: column; /* Arrange items vertically */
-  }
-  
-  /* General styles for the body */
-  body {
-    font-family: sans-serif; /* Default font family */
-    background-color: #424242; /* Background color for the body */
-  }
-  
-  /* Styles for the navigation */
-  nav {
-    background-color: #14213D; /* Background color for the navigation */
-  }
-  
-  .navbar-nav .nav-item {
-  margin-left: 20px; /* Adjust the value as needed */
+	margin-bottom: 20px; /* Margin bottom for spacing between cards */
+	padding: 20px; /* Padding inside the card */
+	border-radius: 10px; /* Rounded corners for the card */
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	/* Box shadow for a subtle effect */
+	display: flex; /* Flex container */
+	flex-direction: column; /* Arrange items vertically */
+}
+
+/* Styles for card body */
+.card-body {
+	flex: 1; /* Take up remaining space */
+	display: flex; /* Flex container */
+	flex-direction: column; /* Arrange items vertically */
+}
+
+/* General styles for the body */
+body {
+	font-family: sans-serif; /* Default font family */
+	background-color: #424242; /* Background color for the body */
+}
+
+/* Styles for the navigation */
+nav {
+	background-color: #14213D; /* Background color for the navigation */
+}
+
+.navbar-nav .nav-item {
+	margin-left: 20px; /* Adjust the value as needed */
 }
 
 /* Adjust navbar height */
 .navbar {
-  padding-top: 15px;
-  padding-bottom: 15px;
+	padding-top: 15px;
+	padding-bottom: 15px;
 }
 
 /* Add spacing after brand logo */
 .navbar_brand {
-  margin-right: 30px; /* Adjust this value for desired spacing */
+	margin-right: 30px; /* Adjust this value for desired spacing */
 }
 
 /* Make the "Get Started" button bold */
 .btn-get-started {
-  font-weight: bold;
+	font-weight: bold;
 }
-
-
 
 /* Hover effect to display dropdown */
 .navbar-nav .dropdown:hover .dropdown-menu {
-    display: block;
+	display: block;
 }
 
 /* Style for the dropdown menu */
 .dropdown-menu {
-    background-color: #14213D; /* Dark blue background */
-    border-radius: 10px; /* Rounded corners */
-    overflow: hidden; /* Hide overflow for rounded corners */
-    padding: 0; /* Remove padding */
+	background-color: #14213D; /* Dark blue background */
+	border-radius: 10px; /* Rounded corners */
+	overflow: hidden; /* Hide overflow for rounded corners */
+	padding: 0; /* Remove padding */
 }
 
 /* Bottom yellow border */
 .dropdown-menu::after {
-    content: "";
-    display: block;
-    height: 8px; /* Adjust the height as needed */
-    background-color: #FFCA45; /* Yellow color at the bottom */
-    border-bottom-left-radius: 10px; /* Rounded bottom corners */
-    border-bottom-right-radius: 10px;
+	content: "";
+	display: block;
+	height: 8px; /* Adjust the height as needed */
+	background-color: #FFCA45; /* Yellow color at the bottom */
+	border-bottom-left-radius: 10px; /* Rounded bottom corners */
+	border-bottom-right-radius: 10px;
 }
 
 .dropdown-item {
-  color: #959BA8; /* Gray color for dropdown items */
-  
-  /* Increase spacing between dropdown menu items */
-  padding-top: 10px; /* Adjust this value as needed */
-  padding-bottom: 10px; /* Adjust this value as needed */
+	color: #959BA8; /* Gray color for dropdown items */
+	/* Increase spacing between dropdown menu items */
+	padding-top: 10px; /* Adjust this value as needed */
+	padding-bottom: 10px; /* Adjust this value as needed */
 }
-
 
 /* Hover effect on dropdown items */
 .dropdown-item:hover {
-    background-color: #3F0A74; /* Purple background on hover */
-    color: #FFFFFF; /* Optional: white text color on hover */
+	background-color: #3F0A74; /* Purple background on hover */
+	color: #FFFFFF; /* Optional: white text color on hover */
 }
 
-  
-  
-  /* General styles for the body with specific color and text */
-  body {
-    font-family: sans-serif; /* Default font family */
-    background-color: #121212; /* Background color for the body */
-    color: #FAF9F6; /* Off-white text color */
-  }
-  
-  /* Styles for the logo */
-  .logo {
-    width: 50px; /* Width of the logo */
-    height: auto; /* Maintain aspect ratio */
-  }
-  
- .bg-top-footer {
- background-color: #14213d
- }
- 
- .bg-bottom-footer{
- background-color: #141414
- }
- 
+/* General styles for the body with specific color and text */
+body {
+	font-family: sans-serif; /* Default font family */
+	background-color: #121212; /* Background color for the body */
+	color: #FAF9F6; /* Off-white text color */
+}
+
+/* Styles for the logo */
+.logo {
+	width: 50px; /* Width of the logo */
+	height: auto; /* Maintain aspect ratio */
+}
+
+.bg-top-footer {
+	background-color: #14213d
+}
+
+.bg-bottom-footer {
+	background-color: #141414
+}
 
 /* Style for footer links */
 footer .list-unstyled li a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.3s ease;
+	color: white;
+	text-decoration: none;
+	transition: color 0.3s ease;
 }
 
 footer .list-unstyled li a:hover {
-    color: #ddd; /* Slightly lighter color on hover */
+	color: #ddd; /* Slightly lighter color on hover */
 }
 
+.accordion-button {
+	background-color: transparent;
+	border: none;
+	color: #333;
+}
+
+.accordion-button:focus {
+	box-shadow: none;
+}
+
+.accordion-body {
+	background-color: #f8f9fa;
+}
+
+.accordion-item {
+	border: none;
+}
