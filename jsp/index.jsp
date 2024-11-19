@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ include file="../includes/header_public.html"%>
-<!-- Include Header -->
-
+<%@ include file="../includes/header.jsp"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,6 +11,7 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 <link href="../css/style.css" rel="stylesheet">
 <link href="../css/colour.css" rel="stylesheet">
+
 </head>
 <body>
 	<main class="container mt-5">

@@ -1,0 +1,119 @@
+<!-- 
+  - Author: Isaac
+  - Date: [Current Date]
+  - Copyright Notice:
+  - @(#)
+  - Description: Header for the Cleaning Service web app, including the navigation menu.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Cleaning Service Web App</title>
+
+<!-- Bootstrap CSS -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet"
+	integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+	crossorigin="anonymous">
+
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+	rel="stylesheet">
+
+<!-- Custom CSS -->
+<link href="../css/style.css" rel="stylesheet">
+<link href="../css/colour.css" rel="stylesheet">
+
+<!-- Axios Library -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- jQuery Library -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<body>
+	<!-- Navigation Bar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		<div class="container">
+			<!-- Brand Logo -->
+			<a class="navbar_brand" href="index.html"> <img
+				src="../images/brand.png" alt="brand" class="logo">
+			</a>
+
+			<!-- Navbar Toggler -->
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNav"
+				aria-controls="navbarNav" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<!-- Navbar Links -->
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav me-auto">
+					<!-- Home Link -->
+					<li class="nav-item"><a class="nav-link active"
+						href="index.jsp">Home</a></li>
+
+					<!-- Services Dropdown -->
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" id="servicesDropdown"
+						role="button" aria-expanded="false"> Services </a>
+						<ul class="dropdown-menu" aria-labelledby="servicesDropdown">
+							<li><a class="dropdown-item"
+								href="../jsp/serviceCategories.jsp">Category</a></li>
+							<li><a class="dropdown-item"
+								href="../jsp/serviceDetails.jsp">Details</a></li>
+							<li><a class="dropdown-item"
+								href="../jsp/serviceBookings.jsp">Booking</a></li>
+						</ul></li>
+				</ul>
+
+<!-- Right-aligned buttons -->
+<ul class="navbar-nav ms-auto">
+    <li class="nav-item d-flex align-items-center"> <!-- Add d-flex and align-items-center here -->
+        <% 
+            String avatarImage = (String) session.getAttribute("avatarImage"); // Fetch avatar image from session
+            if (avatarImage != null && !avatarImage.isEmpty()) { 
+        %>
+            <!-- Make the image a clickable button that redirects to profile.jsp -->
+            <a href="../jsp/profile.jsp" class="d-flex align-items-center">
+                <!-- Display the profile image -->
+                <img src="../images/<%= avatarImage %>" alt="Profile" style="width: 60px; height: 60px; object-fit: cover;" class="rounded-circle me-2" />
+                <!-- Add the dropdown arrow icon -->
+                <i class="bi bi-caret-down-fill" style="color: #959ba8;"></i>
+            </a>
+        <% 
+            } else {
+        %>
+            <!-- If no avatar, just show the word 'Profile' -->
+            <a class="btn btn-outline-light me-2" href="../jsp/profile.jsp">Profile</a>
+        <% 
+            } 
+        %>
+    </li>
+
+    <li class="nav-item d-flex align-items-center"> <!-- Add d-flex and align-items-center here -->
+        <a class="btn btn-get-started"
+           href="${pageContext.request.contextPath}/LogoutServlet"
+           style="background-color: var(--custom-color); color: #121212; font-weight: bold;">Logout</a>
+    </li>
+</ul>
+
+
+
+			</div>
+		</div>
+	</nav>
+	<hr>
+</body>
+
+</html>
