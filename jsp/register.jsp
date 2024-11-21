@@ -13,6 +13,7 @@
     <link href="../css/colour.css" rel="stylesheet">
     
     <script>
+        // Validate Password Function
         function validatePassword() {
             const password = document.getElementById('password').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
@@ -30,6 +31,7 @@
             return true;
         }
         
+        // Toggle Password Visibility
         function togglePasswordVisibility() {
             const passwordField = document.getElementById('password');
             const confirmPasswordField = document.getElementById('confirmPassword');
@@ -45,9 +47,26 @@
                 toggleButton.textContent = 'Show';
             }
         }
+
+        // Show Alert for Duplicate Email
+        function showAlert(message) {
+            alert(message);
+        }
     </script>
 </head>
 <body>
+    <!-- Alert for Duplicate Email -->
+    <%
+        String errCode = request.getParameter("errCode");
+        if ("duplicateEmail".equals(errCode)) {
+    %>
+        <script>
+            showAlert('Cannot register. Email is already registered!');
+        </script>
+    <%
+        }
+    %>
+
     <div class="container mt-5">
         <h2>Registration Form</h2>
         <form action="${pageContext.request.contextPath}/RegisterUserServlet" method="post" onsubmit="return validatePassword()">
