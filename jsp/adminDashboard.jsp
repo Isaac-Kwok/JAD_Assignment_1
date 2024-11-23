@@ -3,7 +3,7 @@
 <%@ page import="java.sql.*"%>
 <!-- 
   - Author: Md Redwanul Hoque Bhuiyan
-  - Date: 11/11/2024
+  - Date: 17/11/2024
   - Copyright Notice:
   - @(#)
   - Description: Admin Dashboard to modify services and view bookings with customer info.
@@ -16,10 +16,8 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="../css/adminDashboard.css">
 
-<!-- Settle Session Management -->
-
+<!-- Apply Session Management -->
 <%
-    /* Dont remove this comment section
     // Session Management Logic
     String userIdAdminValidation = (String) session.getAttribute("sessUserID");
     String userRoleAdminValidation = (String) session.getAttribute("sessUserRole");
@@ -28,17 +26,10 @@
         response.sendRedirect("login.jsp");
         return; // Prevent further execution of the page
     }
-    */
 %>
-
-<style>
-h2 {
-	text-align: center;
-}
-</style>
 </head>
 <body>
-	<%@ include file="../includes/header_admin.html"%>
+	<%@ include file="../includes/header.jsp"%>
 	<!-- Include Header -->
 
 	<div class="container">
@@ -94,13 +85,14 @@ h2 {
 	    <table class="table table-striped table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th>Booking ID</th>
                     <th>User Name</th>
                     <th>Service Name</th>
                     <th>Quantity</th>
                     <th>Special Request</th>
                     <th>Appointment Date</th>
+                    <th>Time Slot</th>
                     <th>Booking Date</th>
+                    <th>Phone number</th>
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
@@ -114,7 +106,7 @@ h2 {
                         Connection conn = DriverManager.getConnection(connURL);
 
                         // Fetch all bookings
-                        String bookingsSQL = "SELECT b.booking_id, m.name AS user_name, s.service_name, bd.quantity, bd.special_request, b.appointment_date, b.booking_date, b.status " +
+                        String bookingsSQL = "SELECT b.booking_id, m.phone_number, b.timeslot, m.name AS user_name, s.service_name, bd.quantity, bd.special_request, b.appointment_date, b.booking_date, b.status " +
                                              "FROM booking b " +
                                              "JOIN member m ON b.member_id = m.member_id " +
                                              "JOIN booking_details bd ON b.booking_id = bd.booking_id " +
@@ -125,13 +117,20 @@ h2 {
                         while (bookingsRS.next()) {
                 %>
                 <tr>
-                    <td><%= bookingsRS.getInt("booking_id") %></td>
                     <td><%= bookingsRS.getString("user_name") %></td>
                     <td><%= bookingsRS.getString("service_name") %></td>
                     <td><%= bookingsRS.getInt("quantity") %></td>
                     <td><%= bookingsRS.getString("special_request") %></td>
                     <td><%= bookingsRS.getDate("appointment_date") %></td>
+                    <td>
+					    <%
+					        Time timeSlot = bookingsRS.getTime("timeslot"); // Fetch timeslot as Time
+					        String formattedTime = timeSlot != null ? timeSlot.toString() : "N/A"; // Format time or show "N/A"
+					    %>
+					    <%= formattedTime %>
+					</td>
                     <td><%= bookingsRS.getDate("booking_date") %></td>
+                    <td><%= bookingsRS.getInt("phone_number") %></td>
                     <td><%= bookingsRS.getString("status") %></td>
                     <td>
                         <form method="post" action="adminDashboard.jsp">
@@ -140,6 +139,7 @@ h2 {
                                 <option value="Pending" <%= bookingsRS.getString("status").equals("Pending") ? "selected" : "" %>>Pending</option>
                                 <option value="Confirmed" <%= bookingsRS.getString("status").equals("Confirmed") ? "selected" : "" %>>Confirmed</option>
                                 <option value="Cancelled" <%= bookingsRS.getString("status").equals("Cancelled") ? "selected" : "" %>>Cancelled</option>
+                                <option value="Completed" <%= bookingsRS.getString("status").equals("Completed") ? "selected" : "" %>>Completed</option>
                             </select>
                             <button type="submit" class="btn btn-success btn-sm mt-2">Update</button>
                         </form>
@@ -177,7 +177,7 @@ h2 {
 	                    Connection conn = DriverManager.getConnection(connURL);
 	
 	                    // Fetch all services
-	                    String servicesSQL = "SELECT s.service_id, s.service_name, s.description, s.price, c.category_name FROM service s JOIN service_category c ON s.category_id = c.category_id";
+	                    String servicesSQL = "SELECT s.service_id, s.service_name, s.description, s.price, c.category_name FROM service s JOIN service_category c ON s.category_id = c.category_id ORDER BY 1";
 	                    PreparedStatement servicesStmt = conn.prepareStatement(servicesSQL);
 	                    ResultSet servicesRS = servicesStmt.executeQuery();
 	
@@ -190,7 +190,7 @@ h2 {
 	                <td>$<%= servicesRS.getDouble("price") %></td>
 	                <td><%= servicesRS.getString("description") %></td>
 	                <td>
-	                    <a href="manageServices.jsp?serviceId=<%= servicesRS.getInt("service_id") %>" class="btn btn-primary btn-sm">Manage</a>
+	                    <a href="adminManageServices.jsp?serviceId=<%= servicesRS.getInt("service_id") %>" class="btn btn-primary btn-sm">Manage</a>
 	                </td>
 	            </tr>
 	            

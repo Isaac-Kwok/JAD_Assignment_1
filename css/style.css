@@ -53,6 +53,13 @@ nav {
 	font-weight: bold;
 }
 
+h1 {
+        text-align: center;
+}
+.back-btn {
+    margin: 10px;
+}
+
 /* Hover effect to display dropdown */
 .navbar-nav .dropdown:hover .dropdown-menu {
 	display: block;

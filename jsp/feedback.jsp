@@ -3,7 +3,7 @@
 <%@ page import="java.sql.*" %>
 <!-- 
   - Author: Md Redwanul Hoque Bhuiyan
-  - Date: 12/11/2024
+  - Date: 21/11/2024
   - Copyright Notice:
   - @(#)
   - Description: Display and add feedback if user completed service.
@@ -13,98 +13,114 @@
 <head>
 <meta charset="UTF-8">
 <title>Feedback</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/adminViewFeedback.css">
 </head>
 <body>
-	<%@ include file="../includes/header_public.html" %> <!-- Include Header -->
-	
-    <h2>Feedback for Service</h2>
-    <div class="container">
+    <%@ include file="../includes/header.jsp" %> <!-- Include Header -->
+    
+     <div class="container">
+        <h1 class="text-center py-3">Service Feedback</h1>
+        
         <%
-            // Get service ID from request
+            // Fetch the service ID from the request
             String serviceIdStr = request.getParameter("serviceId");
-            int memberId = (Integer) session.getAttribute("member_id"); // Using pre-defined session object
-            
-            if (serviceIdStr != null && memberId > 0) {
+            String memberIdStr = (String) session.getAttribute("sessUserID");
+
+            if (serviceIdStr != null) {
                 try {
                     int serviceId = Integer.parseInt(serviceIdStr);
 
                     // Connect to the database
-                    Class.forName("com.mysql.jdbc.Driver");
-                  //String connURL = "jdbc:mysql://localhost:3306/jad_assignment1?user=root&password=subeteoshiete4@&serverTimezone=UTC";
+                    Class.forName("com.mysql.cj.jdbc.Driver");
                     String connURL = "jdbc:mysql://localhost/cleaning_service?user=root&password=henshin111&serverTimezone=UTC";
                     Connection conn = DriverManager.getConnection(connURL);
 
-                    // Check if the user has a completed booking for this service
-                    String checkBookingSQL = "SELECT * FROM booking b "
-                                           + "JOIN booking_details bd ON b.booking_id = bd.booking_id "
-                                           + "WHERE b.member_id = ? AND bd.service_id = ? AND b.status = 'Completed'";
-                    PreparedStatement checkBookingStmt = conn.prepareStatement(checkBookingSQL);
-                    checkBookingStmt.setInt(1, memberId);
-                    checkBookingStmt.setInt(2, serviceId);
-                    ResultSet bookingResult = checkBookingStmt.executeQuery();
-
-                    boolean canAddFeedback = bookingResult.next();
-
-                    // Display existing feedback
-                    String feedbackSQL = "SELECT f.rating, f.comment, f.feedback_date, m.name AS member_name "
-                                       + "FROM feedback f "
-                                       + "JOIN member m ON f.member_id = m.member_id "
-                                       + "WHERE f.service_id = ? "
-                                       + "ORDER BY f.feedback_date DESC";
+                    // Display all feedback for the selected service
+                    String feedbackSQL = "SELECT f.rating, f.comment, m.name, f.feedback_date " +
+                                         "FROM feedback f JOIN member m ON f.member_id = m.member_id " +
+                                         "WHERE f.service_id = ? ORDER BY f.feedback_date DESC";
                     PreparedStatement feedbackStmt = conn.prepareStatement(feedbackSQL);
                     feedbackStmt.setInt(1, serviceId);
-                    ResultSet feedbackResult = feedbackStmt.executeQuery();
-        %>
+                    ResultSet feedbackRs = feedbackStmt.executeQuery();
 
-        <h3>All Feedback</h3>
-        <div>
-            <%
-                while (feedbackResult.next()) {
-                    String memberName = feedbackResult.getString("member_name");
-                    int rating = feedbackResult.getInt("rating");
-                    String comment = feedbackResult.getString("comment");
-                    String feedbackDate = feedbackResult.getString("feedback_date");
-            %>
-                <div class="feedback-entry">
-                    <p><strong><%= memberName %></strong> (Rating: <%= rating %> stars)</p>
-                    <p><%= comment %></p>
-                    <p><em>Submitted on <%= feedbackDate %></em></p>
-                </div>
-                <hr>
-            <%
+                    if (feedbackRs.isBeforeFirst()) { %>
+                        <h3>Feedback for this service:</h3>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Username</th>
+                                    <th>Rating</th>
+                                    <th>Comment</th>
+                                    <th>Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <% while (feedbackRs.next()) { %>
+                                <tr>
+                                    <td><%= feedbackRs.getString("name") %></td>
+                                    <td><%= feedbackRs.getInt("rating") %></td>
+                                    <td><%= feedbackRs.getString("comment") %></td>
+                                    <td><%= feedbackRs.getTimestamp("feedback_date") %></td>
+                                </tr>
+                            <% } %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <p>No feedback available for this service yet.</p>
+                    <% }
+
+                    feedbackRs.close();
+                    feedbackStmt.close();
+
+                    // Check if the user is logged in and has a completed booking
+                    if (memberIdStr != null) {
+                        int memberId = Integer.parseInt(memberIdStr);
+
+                        String bookingSQL = "SELECT b.booking_id " +
+                                "FROM booking b " +
+                                "JOIN booking_details bd ON b.booking_id = bd.booking_id " +
+                                "WHERE b.member_id = ? AND bd.service_id = ? AND b.status = 'Completed'";
+
+                        PreparedStatement bookingStmt = conn.prepareStatement(bookingSQL);
+                        bookingStmt.setInt(1, memberId);
+                        bookingStmt.setInt(2, serviceId);
+                        ResultSet bookingRs = bookingStmt.executeQuery();
+
+                        if (bookingRs.next()) { %>
+                            <h3>Add Your Feedback:</h3>
+                            <form action="${pageContext.request.contextPath}/SubmitFeedbackServlet" method="post">
+                                <input type="hidden" name="serviceId" value="<%= serviceId %>">
+                                <div class="form-group">
+                                    <label for="rating">Rating (1-5):</label>
+                                    <input type="number" class="form-control" id="rating" name="rating" min="1" max="5" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="comment">Comment:</label>
+                                    <textarea class="form-control" id="comment" name="comment" rows="3" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-warning my-2">Submit Feedback</button>
+                            </form>
+                        <% } else { %>
+                            <p class="alert alert-warning">You must complete a booking for this service to leave feedback.</p>
+                        <% }
+
+                        bookingRs.close();
+                        bookingStmt.close();
+                    } else { %>
+                        <p class="alert alert-info">Please <a href="login.jsp">log in</a> to add your feedback.</p>
+                    <% }
+
+                    conn.close();
+                } catch (Exception e) {
+                    out.println("<p class='alert alert-danger'>An error occurred: " + e.getMessage() + "</p>");
                 }
-            %>
-        </div>
-
-        <% 
-            if (canAddFeedback) { 
-        %>
-        <!-- Add Feedback Form -->
-        <h3>Add Your Feedback</h3>
-        <form action="SubmitFeedbackServlet" method="post">
-            <input type="hidden" name="serviceId" value="<%= serviceId %>">
-            <label for="rating">Rating (1 to 5):</label>
-            <input type="number" id="rating" name="rating" min="1" max="5" required><br><br>
-
-            <label for="comment">Comment:</label><br>
-            <textarea id="comment" name="comment" rows="4" cols="50" required></textarea><br><br>
-
-            <input type="submit" value="Submit Feedback">
-        </form>
-        <% 
             } else {
-                out.println("<p style='color:red;'>You can only add feedback if you have completed a booking for this service.</p>");
+                out.println("<p class='alert alert-danger'>Service ID is missing.</p>");
             }
-            conn.close();
-        } catch (Exception e) {
-            out.println("<p>Error: " + e.getMessage() + "</p>");
-        }
-        } else {
-            out.println("<p>Error: Invalid or missing service ID.</p>");
-        }
         %>
     </div>
-	
-	<%@ include file="../includes/footer.html" %> <!-- Include Footer -->
+    
+    <%@ include file="../includes/footer.html" %> <!-- Include Footer -->
 </body>
 </html>

@@ -13,17 +13,22 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style>
-	h2 {
-		text-align: center;
-	}
-</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/style.css">
+	<%
+		String userIdValidation = (String) session.getAttribute("sessUserID");
+	%>
 </head>
 
 <body>
-    <%@ include file="../includes/header_public.html" %> <!-- Include Header -->
+    <%@ include file="../includes/header.jsp" %> <!-- Include Header -->
     
-    <h2>Service Details</h2>
+    <!-- Go back to categories button -->
+    <div class="back-btn py-3 px-4">
+        <a href="serviceCategories.jsp" class="btn btn-primary">Go back to categories</a>
+    </div>
+    
+    <h1 class="text-center py-3">Service Details</h1>
     <div class="container">
         <div class="row">
             <%
@@ -50,12 +55,13 @@
             %>
             <div class="col-md-4">
                 <div class="card">
-                    <img src="<%= imagePath != null ? imagePath : "../images/default.png" %>" class="card-img-top" alt="<%= serviceName %>">
+                    <img src="../images/<%=imagePath%>" class="card-img-top" alt="<%= serviceName %>">
                     <div class="card-body">
                         <h5 class="card-title"><%= serviceName %></h5>
                         <p class="card-text"><%= description %></p>
                         <p><strong>Price:</strong> $<%= price %></p>
-                        <a href="booking.jsp?serviceId=<%= rs.getInt("service_id") %>" class="btn btn-success">Book Service</a> 
+                        <a href="booking.jsp?serviceId=<%= rs.getInt("service_id") %>" class="btn btn-success">Book Service</a>
+                        <br> 
                         <a href="feedback.jsp?serviceId=<%= rs.getInt("service_id") %>" class="btn btn-secondary">Feedback</a>
                     </div>
                 </div>

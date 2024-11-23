@@ -13,16 +13,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Service Categories</title>
-<style>
-	h2 {
-		text-align: center;
-	}
-</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="../css/style.css">
+	<%
+		String userIdValidation = (String) session.getAttribute("sessUserID");
+	%>
 </head>
 
 <body>
 	<%@ include file="../includes/header_public.html" %> <!-- Include Header -->
-	<h2>Service Categories</h2>
+	<h1 class="text-center py-3">Service Categories</h1>
     <div class="container">
     	<div class="row">
         	<%
