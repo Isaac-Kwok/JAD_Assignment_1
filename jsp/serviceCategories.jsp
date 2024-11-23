@@ -28,7 +28,8 @@
         	<%
              // Connect to the database
              Class.forName("com.mysql.jdbc.Driver");
-             String connURL = "jdbc:mysql://localhost:3306/jad_assignment1?user=root&password=subeteoshiete4@&serverTimezone=UTC";
+        	//String connURL = "jdbc:mysql://localhost:3306/jad_assignment1?user=root&password=subeteoshiete4@&serverTimezone=UTC";
+             String connURL = "jdbc:mysql://localhost:3306/cleaning_service?user=root&password=henshin111&serverTimezone=UTC";
              Connection conn = DriverManager.getConnection(connURL);  		
              Statement stmt = conn.createStatement();
              String sqlStr = "SELECT * FROM service_category";

@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+body {
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 900px;
+    margin-top: 20px;
+}
+
+h2, h3 {
+    color: #007bff;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+button {
+    width: 100%;
+}

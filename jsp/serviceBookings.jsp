@@ -20,13 +20,16 @@
             PreparedStatement pstBooking = null;
             PreparedStatement pstBookingDetails = null;
             ResultSet generatedKeys = null;
+            String memberId = "1";
 
+            /*
             String memberId = (String) session.getAttribute("member_id");
             if (memberId == null) {
                 response.sendRedirect("login.jsp?errCode=notLoggedIn");
                 return;
             }
-
+			*/
+            
             String serviceId = request.getParameter("service_id");
             String quantity = request.getParameter("quantity");
             String appointmentDate = request.getParameter("appointment_date");
@@ -36,7 +39,8 @@
                 // Step 1: Load JDBC Driver
                 Class.forName("com.mysql.jdbc.Driver");
                 // Step 2: Establish connection
-                String connURL = "jdbc:mysql://localhost:3306/jad_assignment1?user=root&password=subeteoshiete4@&serverTimezone=UTC";
+                //String connURL = "jdbc:mysql://localhost:3306/jad_assignment1?user=root&password=subeteoshiete4@&serverTimezone=UTC";
+                String connURL = "jdbc:mysql://localhost:3306/cleaning_service?user=root&password=henshin111&serverTimezone=UTC";
                 conn = DriverManager.getConnection(connURL);
 
                 // Step 3: Insert booking into booking table

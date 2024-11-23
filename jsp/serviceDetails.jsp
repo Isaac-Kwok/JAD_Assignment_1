@@ -34,6 +34,7 @@
                         
                         // Connect to the database
                         Class.forName("com.mysql.cj.jdbc.Driver");
+                        //String connURL = "jdbc:mysql://localhost:3306/jad_assignment1?user=root&password=subeteoshiete4@&serverTimezone=UTC";
                         String connURL = "jdbc:mysql://localhost/cleaning_service?user=root&password=henshin111&serverTimezone=UTC";
                         Connection conn = DriverManager.getConnection(connURL);
                         String sqlStr = "SELECT * FROM service WHERE category_id = ?";
