@@ -6,16 +6,20 @@
   - Date: 19/11/2024
   - Copyright Notice:
   - @(#)
-  - Description: Admin Dashboard to modify services and view bookings with customer info.
+  - Description: Admin Page to view members and update selected member details such as inappropriate username, address etc and delete member
 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Manage Members</title>
+<!-- Added Bootstrap & CSS files -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
-<link rel="stylesheet" href="../css/adminManageMembers.css">
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/colour.css">
+<link rel="stylesheet" href="../css/adminManagement.css">
 <script>
+    //Function to confirm member deletion
 	function confirmDelete(memberId) {
 	    if (confirm("Are you sure you want to delete this member?")) {
 	        document.getElementById('deleteForm').memberId.value = memberId;
@@ -23,6 +27,7 @@
 	    }
 	}
 
+	// Function to display the update form with pre-filled data for better user experience
     function showUpdateForm(memberId, name, phone, address) {
         document.getElementById('updateForm').style.display = 'block';
         document.getElementById('memberId').value = memberId;
@@ -31,18 +36,19 @@
         document.getElementById('address').value = address;
     }
 </script>
-    
 
 	<%
-	    // Apply Session Management
+	    // Apply Session Management: Ensure the user is logged in as an admin
 	    String userIdAdminValidation = (String) session.getAttribute("sessUserID");
 	    String userRoleAdminValidation = (String) session.getAttribute("sessUserRole");
 	
+	    // Redirect to login if the user is not an admin
 	    if (userIdAdminValidation == null || !"2".equals(userRoleAdminValidation)) {
 	        response.sendRedirect("login.jsp");
 	        return; // Prevent further execution of the page
 	    }
 	    
+	    // Initialize variables for search and action handling
 	    String searchName = request.getParameter("searchName");
 	    String action = request.getParameter("action");
 	    String message = null;
@@ -54,9 +60,10 @@
 	        String phone = request.getParameter("phone");
 	        String address = request.getParameter("address");
 	
+	     // Update member details in the database
 	        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cleaning_service?user=root&password=henshin111&serverTimezone=UTC");
 	             PreparedStatement stmt = conn.prepareStatement("UPDATE member SET name = ?, phone_number = ?, address = ? WHERE member_id = ?")) {
-	
+
 	            stmt.setString(1, name);
 	            stmt.setString(2, phone);
 	            stmt.setString(3, address);
@@ -67,31 +74,32 @@
 	            message = "Error updating member: " + e.getMessage();
 	        }
 	    }
-	
-	    // Handle delete operation
+
+	    // Handle member delete operation
 	    if ("delete".equals(action)) {
-	    	int memberId = Integer.parseInt(request.getParameter("memberId"));
+	        int memberId = Integer.parseInt(request.getParameter("memberId"));
 
-	    	try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cleaning_service?user=root&password=henshin111&serverTimezone=UTC")) {
-	    	    // Check for existing bookings first
-	    	    PreparedStatement checkBookingStmt = conn.prepareStatement("SELECT COUNT(*) FROM booking WHERE member_id = ?");
-	    	    checkBookingStmt.setInt(1, memberId);
-	    	    ResultSet rs = checkBookingStmt.executeQuery();
-	    	    rs.next();
-	    	    int bookingCount = rs.getInt(1);
+	        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cleaning_service?user=root&password=henshin111&serverTimezone=UTC")) {
+	            // Check for existing bookings before deletion
+	            PreparedStatement checkBookingStmt = conn.prepareStatement("SELECT COUNT(*) FROM booking WHERE member_id = ?");
+	            checkBookingStmt.setInt(1, memberId);
+	            ResultSet rs = checkBookingStmt.executeQuery();
+	            rs.next();
+	            int bookingCount = rs.getInt(1);
 
-	    	    if (bookingCount > 0) {
-	    	        message = "Error deleting member: This member has existing bookings.";
-	    	    } else {
-	    	        // If no bookings, proceed with deletion
-	    	        PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM member WHERE member_id = ?");
-	    	        deleteStmt.setInt(1, memberId);
-	    	        deleteStmt.executeUpdate();
-	    	        message = "Member deleted successfully!";
-	    	    }
-	    	} catch (SQLException e) {
-	    	    message = "Error deleting member: " + e.getMessage();
-	    	}
+	            // If member has existing bookings, prevent deletion
+	            if (bookingCount > 0) {
+	                message = "Error deleting member: This member has existing bookings.";
+	            } else {
+	                // If no bookings, proceed with deletion
+	                PreparedStatement deleteStmt = conn.prepareStatement("DELETE FROM member WHERE member_id = ?");
+	                deleteStmt.setInt(1, memberId);
+	                deleteStmt.executeUpdate();
+	                message = "Member deleted successfully!";
+	            }
+	        } catch (SQLException e) {
+	            message = "Error deleting member: " + e.getMessage();
+	        }
 	    }
 	%>
 </head>
@@ -107,7 +115,7 @@
 	        <div class="alert alert-info"><%= message %></div>
 	    <% } %>
 	
-	    <!-- Search Form -->
+	    <!-- Search Form for members -->
 	    <form method="get" action="adminManageMembers.jsp" class="mb-4">
 	        <div class="input-group">
 	            <input type="text" name="searchName" placeholder="Search by name" class="form-control" value="<%= searchName != null ? searchName : "" %>">
@@ -115,7 +123,7 @@
 	        </div>
 	    </form>
 	
-	    <!-- Members Table -->
+	    <!-- Table to display all members -->
 	    <table class="table table-bordered">
 	        <thead>
 	            <tr class="table-primary">
@@ -128,20 +136,22 @@
 	        </thead>
 	        <tbody>
 	            <%
+	                // Query to fetch members from the database
 	                String query = "SELECT * FROM member";
 	                if (searchName != null && !searchName.isEmpty()) {
 	                    query += " WHERE name LIKE ?";
 	                }
-	
+
 	                boolean hasResults = false;
-	
+
+	                // Execute the query and display members
 	                try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/cleaning_service?user=root&password=henshin111&serverTimezone=UTC");
 	                     PreparedStatement stmt = conn.prepareStatement(query)) {
-	
+
 	                    if (searchName != null && !searchName.isEmpty()) {
 	                        stmt.setString(1, "%" + searchName + "%");
 	                    }
-	
+
 	                    ResultSet rs = stmt.executeQuery();
 	                    while (rs.next()) {
 	                        hasResults = true;
@@ -166,7 +176,8 @@
 	                } catch (SQLException e) {
 	                    out.println("<tr><td colspan='5'>Error: " + e.getMessage() + "</td></tr>");
 	                }
-	
+
+	                // Display message if no members are found
 	                if (!hasResults) {
 	            %>
 	                <tr>
@@ -178,7 +189,7 @@
 	        </tbody>
 	    </table>
 	
-	    <!-- Update Form -->
+	    <!-- Update Form to modify member details -->
 	    <div id="updateForm" style="display:none;" class="card p-3">
 	        <h3>Update Member</h3>
 	        <form method="post" action="adminManageMembers.jsp">
@@ -200,7 +211,7 @@
 	        </form>
 	    </div>
 	
-	    <!-- Delete Form -->
+	    <!-- Hidden form to delete member -->
 	    <form method="post" action="adminManageMembers.jsp" id="deleteForm">
 	        <input type="hidden" name="action" value="delete">
 	        <input type="hidden" name="memberId">
